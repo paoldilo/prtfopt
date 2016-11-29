@@ -1,7 +1,3 @@
-
-#symboli <- c("MSFT","C","MMM")
-
-
 getQuoteTable<- function(symboli,years=3,periodicity="D")
 {
      query_string=""
@@ -30,7 +26,7 @@ getQuoteTable<- function(symboli,years=3,periodicity="D")
      URL <- paste0("http://chart.finance.yahoo.com/table.csv?s=",symboli,query_string)
      dat <- read.csv(URL,header = TRUE,dec = ".",colClasses = c("Date","numeric","numeric","numeric","numeric","integer","numeric"))
      dat$Date <- as.Date(dat$Date, "%Y-%m-%d")
-     assign( paste0( symboli[i],"_data"), dat)
+     assign(paste0(symboli,"_data"), dat)
      #return the table
      return(dat)
 }
@@ -46,13 +42,31 @@ getQuotesDataFrame<- function(symbolist,years=3,periodicity="D")
     # if something's wrong exit
     if (evrth_fine==FALSE) stop("Invalid arguments")
     
-    
+    dt_table<- getQuoteTable(symbolist[1],years,periodicity)
+    fullDF<-as.data.frame(dt_table$Date)
+    colnames(fullDF) <- "Date"
     for(i in seq_along(symbolist)) {
         #call the getQuoteTable function
         dt_table<- getQuoteTable(symbolist[i],years,periodicity)
         #take only the date and adjusted close columns
-        
+        #dt_table <- dt_table[,c("Date","Adj. Close")]
         #merge with the other tickers
+        fullDF$newcol <- dt_table$'Adj.Close'
+        colnames(fullDF)[i+1] <- symbolist[i]
     }
+    colnames(fullDF)<-c("Date",symbolist)
     #return the full dataframe
+    return(fullDF)
+}
+
+unitTestDwdl <- function()
+{
+ #return a test data frame of 4 tickers
+  symboli <- c("MSFT","C","MMM","AAPL")
+  df<-getQuotesDataFrame(symboli,periodicity = "M",years = 10)
+  df1<-getQuotesDataFrame(symboli,periodicity = "W",years = 5)
+  df2<-getQuotesDataFrame(symboli,periodicity = "D",years = 4)
+  View(df)
+  View(df1)
+  View(df2)
 }
