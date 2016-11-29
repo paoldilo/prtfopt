@@ -1,0 +1,8 @@
+get symbols from variety of sectors, commodity, indexes
+calculate montly, weekly, daily variations
+set time period 
+calculate expeted returns and standard deviation
+calculate best n stock portfolio based on risk and return (* to be further inspected)
+return portfolio allocation
+
+
