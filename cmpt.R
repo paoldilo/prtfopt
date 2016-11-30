@@ -16,11 +16,3 @@ getMainDataTable<- function(years=3,periodicity="D")
   colnames(mainData2)[1]<-c("Date")
   return(mainData2)
 }
-getMainDataParameters<- function(mainData)
-{
-    #takes a mainData data frame and returns a dataframe with:
-    # first row -> expected value or mean
-    # second row -> variance
-    # third row -> standard deviation
-    mainData2 <- rbind(getMainDataEx(mainData),getMainDataVar(mainData),getMainDataSd(mainData))
-}

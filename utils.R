@@ -10,7 +10,7 @@ percDifference<- function(vectorQ)
     #computes the percentage difference from the previous day as
     # [P(t)-P(t-1)]/P(t-1)
     #View(vectorQ)
-    return(-diff(vectorQ)/tail(vectorQ,length(vectorQ)-1))
+    return((-diff(vectorQ)*100)/tail(vectorQ,length(vectorQ)-1))
 }
 getMainDataEx<- function(mainData)
 {
@@ -35,7 +35,7 @@ getMainDataCovarianceMx <- function (mainData)
     n <- nrow(mainData2) #number of subjects
     
     #create means for each column
-    Mx_mean <- data.frame(data=1, nrow=n) %*% as.matrix(getMainDataEx(maindata) [1,])
+    Mx_mean <- matrix(data=1, nrow=n) %*% as.matrix(getMainDataEx(mainData) [1,])
     
     #creates a difference matrix
     differ <- as.matrix(mainData2) - Mx_mean
@@ -47,5 +47,28 @@ getMainDataCovarianceMx <- function (mainData)
 
 getMainDataCorrelationMx <- function(covMx)
 {
+    #return the correlation matrix
     return(cor<-cov2cor(covMx))
+}
+
+getMainDataParameters<- function(mainData)
+{
+  #takes a mainData data frame and returns a dataframe with:
+  # first row -> expected value or mean
+  # second row -> variance
+  # third row -> standard deviation
+  mainData2 <- rbind(getMainDataEx(mainData),getMainDataVar(mainData),getMainDataSd(mainData))
+}
+
+initWeight<- function(dimension)
+{
+  #initialize the weight vector with random variables
+  matrix(data=runif(dimension, min=0, max=0.2),ncol = 1,nrow = dimension)
+}
+computeVolatility <- function(covMx,portWeight)
+{
+  #compute the variance value as wT*cov*w
+  #compute the volatility as the square root of the variance
+  variance <- t(portWeight)%*% covMx %*% portWeight
+  return(sqrt(variance))
 }
