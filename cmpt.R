@@ -1,19 +1,26 @@
-source('dwld.R')
+if(!exists("getQuoteTable", mode="function")) source('dwld.R')
+if(!exists("percDifference", mode="function")) source('utils.R')
 
-loadTickersFromFile <- function()
-{
-  a<-read.csv("tickers.cfg",header = FALSE,stringsAsFactors = FALSE)
-  tckrVector<-as.character(a[1,])
-  return(tckrVector)
-}
+
 
 getMainDataTable<- function(years=3,periodicity="D")
 {
   # load tickers from file
   tckrVector<-loadTickersFromFile()
   # get the data from Yahoo
-  mainData<-getQuoteTable(tckrVector,years,periodicity)
-  
+  mainData<-getQuotesDataFrame(tckrVector,years,periodicity)
   #elaborate data frame
-  
+  #mainData2<-diff(mainData[,-1])/tail(mainData[,-1],nrow(mainData)-1)
+  #mainData2 <- data.frame(apply(mainData[2:ncol(mainData)],2,A))
+  mainData2 <- data.frame(mainData[2:nrow(mainData),1],lapply(mainData[2:ncol(mainData)],percDifference))
+  colnames(mainData2)[1]<-c("Date")
+  return(mainData2)
+}
+getMainDataParameters<- function(mainData)
+{
+    #takes a mainData data frame and returns a dataframe with:
+    # first row -> expected value or mean
+    # second row -> variance
+    # third row -> standard deviation
+    mainData2 <- rbind(getMainDataEx(mainData),getMainDataVar(mainData),getMainDataSd(mainData))
 }
