@@ -1,7 +1,6 @@
 if(!exists("getQuoteTable", mode="function")) source('dwld.R')
 if(!exists("percDifference", mode="function")) source('utils.R')
-
-
+library(GA)
 
 getMainDataTable<- function(years=3,periodicity="D")
 {
@@ -16,3 +15,4 @@ getMainDataTable<- function(years=3,periodicity="D")
   colnames(mainData2)[1]<-c("Date")
   return(mainData2)
 }
+
