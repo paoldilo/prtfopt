@@ -51,7 +51,16 @@ getQuotesDataFrame<- function(symbolist,years=3,periodicity="D")
         #take only the date and adjusted close columns
         #dt_table <- dt_table[,c("Date","Adj. Close")]
         #merge with the other tickers
-        fullDF$newcol <- dt_table$'Adj.Close'
+        #if length is different compensate at the end
+        if (nrow(dt_table)>nrow(fullDF)) 
+          {
+          dt_table<-dt_table[1:nrow(fullDF),]
+        } 
+        if (nrow(dt_table)<nrow(fullDF))  {
+            dif<-nrow(fullDF)-nrow(dt_table)
+            dt_table <- rbind(dt_table,dt_table[(nrow(dt_table)-dif+1):nrow(dt_table),])
+          }
+        fullDF<- cbind(fullDF,dt_table$'Adj.Close')
         colnames(fullDF)[i+1] <- symbolist[i]
     }
     colnames(fullDF)<-c("Date",symbolist)
