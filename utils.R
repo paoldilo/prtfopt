@@ -72,3 +72,10 @@ computeVolatility <- function(covMx,portWeight)
   variance <- t(portWeight)%*% covMx %*% portWeight
   return(sqrt(variance))
 }
+
+computePortfExp<- function(mainDataParamExpect,portWeight)
+{
+  #compute the portfolio expected return multiplying 
+  #the expected return of the stocks for their weight
+  return(mainDataParamExpect %*% t(portWeight))
+}

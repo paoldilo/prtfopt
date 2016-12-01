@@ -16,3 +16,4 @@ getMainDataTable<- function(years=3,periodicity="D")
   return(mainData2)
 }
 
+computeGAport <- function(min,max,popSize,maxiter,run)
