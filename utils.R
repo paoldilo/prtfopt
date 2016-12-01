@@ -79,3 +79,8 @@ computePortfExp<- function(mainDataParamExpect,portWeight)
   #the expected return of the stocks for their weight
   return(mainDataParamExpect %*% t(portWeight))
 }
+
+fitnessFunction <- function(x,Expect)
+{
+  #x has n dimensions
+}

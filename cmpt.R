@@ -1,6 +1,8 @@
 if(!exists("getQuoteTable", mode="function")) source('dwld.R')
 if(!exists("percDifference", mode="function")) source('utils.R')
 library(GA)
+library(doParallel)
+library(parallel)
 
 getMainDataTable<- function(years=3,periodicity="D")
 {
@@ -16,4 +18,12 @@ getMainDataTable<- function(years=3,periodicity="D")
   return(mainData2)
 }
 
-computeGAport <- function(min,max,popSize,maxiter,run)
+computeGAport <- function(Expect,Min,Max,PopSize,Maxiter,Run)
+{
+  n<-11
+  GA2 <- ga(type = "real-valued", 
+      fitness =  fitnessFunction,... = Expect,
+      min = matrix(data=Min, ncol =n,nrow=1), max = matrix(data=Max, ncol =n,nrow=1), 
+      popSize = 150, maxiter = Maxiter, monitor = FALSE,
+      seed = 12345, parallel = TRUE,run = Run)
+}
